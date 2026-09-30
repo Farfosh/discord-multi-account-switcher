@@ -9,6 +9,14 @@ Keep several Discord accounts signed in at once, each in its own isolated Chrome
 
 ![Profile Switcher popup: profiles list with actions, light theme, and server invite tab](docs/screenshots/hero.png)
 
+<p align="center">
+  <a href="https://github.com/Farfosh/discord-multi-account-switcher/releases/latest/download/DiscordProfileSwitcher-windows.zip"><b>⬇ Download for Windows</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://farfosh.github.io/discord-multi-account-switcher/">Download page and install guide</a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/Farfosh/discord-multi-account-switcher/releases">All releases</a>
+</p>
+
 ## What it does
 
 Each saved profile is a separate Chrome user-data folder. You sign in to Discord once inside that profile's window, with your password, QR code, or MFA, and Chrome keeps the session there. Next time you click **Open** and the same signed-in window comes back.
@@ -47,12 +55,12 @@ The helper is self-contained, so it runs without installing .NET.
 
 ## Install (Windows)
 
-1. Download or clone this repository.
+1. Download **[DiscordProfileSwitcher-windows.zip](https://github.com/Farfosh/discord-multi-account-switcher/releases/latest/download/DiscordProfileSwitcher-windows.zip)** from the latest release. Right-click it, choose **Properties**, tick **Unblock**, then **Extract All** to a folder you'll keep.
 2. Open `chrome://extensions` in your main Chrome profile, turn on **Developer mode**, click **Load unpacked**, and select the `extension` folder.
-3. Install the helper by double-clicking `scripts\install-native-host.cmd`.
-   - If `artifacts\native-host\DiscordMultiAccountHost.exe` exists (for example, downloaded from this repository's Releases page), the installer checks its SHA-256 hash and uses it.
-   - Otherwise it builds the helper from source, which needs the [.NET 8 SDK](https://dotnet.microsoft.com/download) or newer.
+3. Install the helper by double-clicking `scripts\install-native-host.cmd`. The zip includes the prebuilt helper, and the installer checks its SHA-256 hash before using it.
 4. Reload Chrome, pin **Discord Profile Switcher**, open it, and check that the bottom bar says **Helper ready**.
+
+Installing from a clone of this repository instead? The helper binary isn't committed, so the installer builds it from source, which needs the [.NET 8 SDK](https://dotnet.microsoft.com/download) or newer.
 
 The extension has a fixed development ID, `ofnblgcbllibhicnkjhogibgpjmnpncf`, which the helper is locked to.
 
@@ -126,9 +134,9 @@ Double-click `scripts\uninstall-native-host.cmd`, then remove the extension from
 ```text
 extension/         Chrome extension (Manifest V3): popup UI and background worker
 native-host/       Windows helper (.NET 8) that stores metadata and launches Chrome
-scripts/           Install and uninstall the helper, generate icons
+scripts/           Install and uninstall the helper, package releases, generate icons
 tests/             Node test suites for the extension, worker, and helper
-docs/screenshots/  Images used in this README
+docs/              Download page (GitHub Pages) and README screenshots
 ```
 
 Build the helper and run the tests from the repository root:
@@ -150,6 +158,8 @@ $env:RUN_METADATA_TESTS = "1"; node .\tests\test-host.mjs
 ```
 
 After rebuilding the helper, update `$ExpectedHostHash` in `scripts\install-native-host.ps1` to the new file's SHA-256, or the installer will refuse the prebuilt file.
+
+To build a release, run `scripts\package-release.ps1`. It refuses to package a helper whose hash doesn't match the installer, then writes `dist\DiscordProfileSwitcher-windows.zip` and `dist\SHA256SUMS.txt`. Attach both to a GitHub release. The download page in `docs/` is published with GitHub Pages and always links to the latest release.
 
 ---
 

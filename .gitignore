@@ -1,8 +1,9 @@
 native-host/bin/
 native-host/obj/
 
-# Build output. Publish DiscordMultiAccountHost.exe as a GitHub Release asset instead.
+# Build output. The helper exe ships inside the release zip instead.
 artifacts/
+dist/
 
 # Local tooling
 .claude/
