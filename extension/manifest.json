@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Discord Profile Switcher",
+  "version": "1.8.0",
+  "minimum_chrome_version": "105",
+  "description": "Open isolated Discord Chrome profiles without storing or injecting account tokens.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA40DK84Epe+N8xjQR4L5j0kMFMQ1jPoiD4eAF7saazOZLYGUdAQJufk69x6C6mPcFZAaG7dEsuX2otP8WqDvrGKS70ocfAhgBWmSAhIKGkS7UFFml+6ZQzgIoXMSqXyuf4IbTwEOTpElTO3RuBN7Q3G91hQExCES028a5tKmpHrTMTkqJCV+TJwdQFWIzT3bX/O8vvCdwc884NcesRauDK3JcXqCDWcBigxdmVHk2E5/ByijQibCIp7jA5doEL/4V+JSlsylXIbZVOLLR7U06auTrBNIHLG8WvrDZ7AMe5lDbFYB9wuFUt5Q+VxmLZQZA7l4/ORZj4MI0wDI0geaWAQIDAQAB",
+  "permissions": [
+    "nativeMessaging"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Discord Profile Switcher",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    },
+    "default_popup": "popup.html"
+  }
+}

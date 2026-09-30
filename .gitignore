@@ -1,0 +1,9 @@
+native-host/bin/
+native-host/obj/
+
+# Build output. Publish DiscordMultiAccountHost.exe as a GitHub Release asset instead.
+artifacts/
+
+# Local tooling
+.claude/
+*.tmp

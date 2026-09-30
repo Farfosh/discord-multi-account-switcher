@@ -1,0 +1,4 @@
+* text=auto
+*.cmd text eol=crlf
+*.png binary
+*.exe binary

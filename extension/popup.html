@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark light">
+    <title>Discord Profile Switcher</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+            <defs>
+              <linearGradient id="brand-gradient" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#7580ff"/>
+                <stop offset="1" stop-color="#4450c8"/>
+              </linearGradient>
+            </defs>
+            <rect width="32" height="32" rx="9" fill="url(#brand-gradient)"/>
+            <circle cx="20.5" cy="11.25" r="3.5" fill="#fff" fill-opacity=".55"/>
+            <path d="M14.25 23.5a6.25 6.25 0 0 1 12.5 0z" fill="#fff" fill-opacity=".55"/>
+            <circle cx="12.5" cy="13" r="4.25" fill="#fff" stroke="url(#brand-gradient)" stroke-width="1.75"/>
+            <path d="M5 26a7.5 7.5 0 0 1 15 0z" fill="#fff" stroke="url(#brand-gradient)" stroke-width="1.75" stroke-linejoin="round"/>
+          </svg>
+          <div class="brand-copy">
+            <h1>Profile Switcher</h1>
+            <p>Isolated Discord sessions</p>
+          </div>
+        </div>
+        <span class="trust-pill" title="This extension never reads, stores, or injects Discord tokens.">
+          <span class="icon i-shield" aria-hidden="true"></span>
+          No tokens stored
+        </span>
+      </header>
+
+      <div id="tabs" class="tabs" role="tablist" aria-label="Sections" data-active="profiles">
+        <span class="tab-indicator" aria-hidden="true"></span>
+        <button id="tab-profiles" class="tab" type="button" role="tab" aria-selected="true" aria-controls="panel-profiles">
+          Profiles
+          <span id="account-count" class="count"></span>
+        </button>
+        <button id="tab-invite" class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-invite" tabindex="-1">
+          Server invite
+        </button>
+      </div>
+
+      <main class="panels">
+        <section id="panel-profiles" class="panel" role="tabpanel" aria-labelledby="tab-profiles">
+          <div class="list-toolbar">
+            <h2 id="accounts-title" class="section-title">Active profiles</h2>
+            <div id="search" class="input-shell search" hidden>
+              <span class="icon i-search" aria-hidden="true"></span>
+              <input
+                id="account-search"
+                class="input small"
+                type="search"
+                placeholder="Search names and tags"
+                aria-label="Search profiles"
+                autocomplete="off"
+                spellcheck="false"
+              >
+            </div>
+            <button id="new-profile" class="button primary small with-icon i-plus" type="button">New profile</button>
+          </div>
+
+          <ul id="account-list" class="account-list" aria-labelledby="accounts-title" aria-busy="true">
+            <li class="skeleton-card" aria-hidden="true"><span class="skeleton-avatar"></span><span class="skeleton-lines"><span></span><span></span></span></li>
+            <li class="skeleton-card" aria-hidden="true"><span class="skeleton-avatar"></span><span class="skeleton-lines"><span></span><span></span></span></li>
+            <li class="skeleton-card" aria-hidden="true"><span class="skeleton-avatar"></span><span class="skeleton-lines"><span></span><span></span></span></li>
+          </ul>
+
+          <p id="no-results" class="no-results" hidden>No profiles match your search.</p>
+
+          <div id="empty-state" class="empty-state" data-variant="first-run" hidden>
+            <div class="empty-art" aria-hidden="true">
+              <span class="empty-orb" data-tone="1"></span>
+              <span class="empty-orb is-main with-icon i-plus" data-tone="0"></span>
+              <span class="empty-orb" data-tone="3"></span>
+            </div>
+            <p>No saved accounts yet.</p>
+            <small>Create a Chrome profile, then sign in inside the separate Discord window.</small>
+            <ol class="steps">
+              <li>Create a profile. The name is optional.</li>
+              <li>Sign in to Discord in the window that opens.</li>
+              <li>Reopen it from this list with one click.</li>
+            </ol>
+            <button id="empty-create" class="button primary with-icon i-plus" type="button">Create your first profile</button>
+          </div>
+
+          <details id="archived-section" class="disclosure archived" hidden>
+            <summary>
+              <span class="summary-chevron" aria-hidden="true"></span>
+              <span>Archived profiles</span>
+              <span id="archived-count" class="count muted">0</span>
+            </summary>
+            <ul id="archived-list" class="account-list" aria-label="Archived profiles"></ul>
+          </details>
+
+          <details class="disclosure explainer">
+            <summary>
+              <span class="icon i-shield" aria-hidden="true"></span>
+              <span>How it works</span>
+              <span class="summary-chevron end" aria-hidden="true"></span>
+            </summary>
+            <div class="explainer-body">
+              <p><strong>This does not copy the account open in your current tab.</strong> Create a profile, then sign in inside the separate Discord window. Chrome keeps that login in the isolated profile; no tokens are copied.</p>
+              <p>Names, tags, and pictures are local labels. Changing them never touches the Discord account or its session. Never paste a Discord token anywhere.</p>
+            </div>
+          </details>
+        </section>
+
+        <section id="panel-invite" class="panel" role="tabpanel" aria-labelledby="tab-invite" hidden>
+          <div class="panel-intro">
+            <span class="icon-tile i-link" aria-hidden="true"></span>
+            <div>
+              <h2 id="invite-title">Server invite</h2>
+              <p>Opens the invite in every active profile, each in its own window.</p>
+            </div>
+          </div>
+
+          <form id="invite-form" class="invite-form" autocomplete="off" novalidate>
+            <label for="invite-input" class="field-label">Discord invite</label>
+            <div class="input-shell">
+              <span class="icon i-link" aria-hidden="true"></span>
+              <input
+                id="invite-input"
+                class="input"
+                name="invite"
+                type="text"
+                inputmode="url"
+                maxlength="512"
+                spellcheck="false"
+                placeholder="discord.gg/example"
+                aria-describedby="invite-feedback invite-rules"
+              >
+            </div>
+            <p id="invite-feedback" class="field-feedback" aria-live="polite"></p>
+
+            <div class="target-card">
+              <div id="invite-avatars" class="avatar-stack" aria-hidden="true"></div>
+              <span id="invite-targets" class="target-text">No active profiles yet.</span>
+            </div>
+
+            <button id="invite-submit" class="button primary block with-icon trailing i-arrow" type="submit" disabled>Open all active</button>
+          </form>
+
+          <ul id="invite-rules" class="rules">
+            <li>Archived profiles stay closed.</li>
+            <li>You confirm Join Server manually in each window.</li>
+            <li>Only the invite code is used. Tracking parameters are dropped.</li>
+            <li>One batch opens at most 20 profiles.</li>
+          </ul>
+        </section>
+      </main>
+
+      <div class="toast">
+        <span class="toast-icon" aria-hidden="true"></span>
+        <p id="notice" class="toast-message" role="status" aria-live="polite"></p>
+        <button id="notice-action" class="toast-action" type="button" hidden></button>
+        <button id="notice-close" class="icon-button small toast-close i-x" type="button" aria-label="Dismiss message"></button>
+      </div>
+
+      <footer class="statusbar">
+        <span id="helper-dot" class="status-dot" aria-hidden="true"></span>
+        <span id="helper-status" class="helper-status" role="status" aria-live="polite">Checking helper...</span>
+        <button id="check-helper" class="icon-button small i-refresh" type="button" aria-label="Check helper again" title="Check helper again"></button>
+      </footer>
+    </div>
+
+    <dialog id="sheet" class="sheet" aria-labelledby="sheet-title" aria-describedby="sheet-message">
+      <form id="sheet-form" class="sheet-form" autocomplete="off" novalidate>
+        <div class="sheet-head">
+          <span class="icon-tile sheet-icon" aria-hidden="true"></span>
+          <div class="sheet-heading">
+            <h2 id="sheet-title"></h2>
+            <p id="sheet-message"></p>
+          </div>
+        </div>
+        <div id="sheet-field" class="sheet-field" hidden>
+          <label id="sheet-label" for="sheet-input" class="field-label"></label>
+          <input id="sheet-input" class="input" type="text" spellcheck="false" aria-describedby="sheet-hint">
+          <p id="sheet-hint" class="field-feedback"></p>
+        </div>
+        <div class="sheet-actions">
+          <button id="sheet-cancel" class="button secondary" type="button">Cancel</button>
+          <button id="sheet-confirm" class="button primary" type="submit">Save</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
